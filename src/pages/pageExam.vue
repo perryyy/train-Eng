@@ -64,7 +64,7 @@
   onMounted(() => {
     if (fetchTopic === undefined) {
       userStore.updateExamStart(false)
-      router.push('/')
+      router.push('/train-Eng')
     } else {
       genTopic()
     }

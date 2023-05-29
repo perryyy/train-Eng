@@ -5,7 +5,7 @@ import { useSettingStore } from '@/store/setting'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/train-Eng',
     name: 'Index',
     meta: {
       title: 'Index',
@@ -33,7 +33,7 @@ router.beforeEach((to, from) => {
   const userStore = useTopicStore()
   const isExamStart = userStore.isExamStart
   const settingStore = useSettingStore()
-  if (to.fullPath === '/' && isExamStart) {
+  if (to.fullPath === '/train-Eng/' && isExamStart) {
     settingStore.isChangeDialogStatus(true)
     return false
   } else {

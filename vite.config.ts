@@ -14,5 +14,6 @@ export default defineConfig({
   plugins: [
     vue(),
     visualizer({ open: true }) // 自动开启分析页面
-  ]
+  ],
+  base: '/train-Eng/'
 })

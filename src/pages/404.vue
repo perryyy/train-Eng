@@ -22,7 +22,7 @@
   
 	const jumpToHome = () => {
     state.dialogVisible = false
-    router.push('/')
+    h('/')
 	}
   let jumpTimer: NodeJS.Timeout | null 
 

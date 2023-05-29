@@ -38,7 +38,7 @@
   const back = () => {
     changeDialogStatus(false)
     userStore.updateExamStart(false)
-    router.push('/')
+    router.push('/train-Eng')
   }
 </script>
 <style lang="scss" scoped>
