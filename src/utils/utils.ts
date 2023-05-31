@@ -1,4 +1,6 @@
 import { OBJECT_STANDARD } from '@/type'
+import { ElLoading } from 'element-plus'
+import { CONST } from '@/utils/const'
 
 // Get random items from an array
 const getRandomItemsFromArray = (arr: any, count: number) => {
@@ -50,9 +52,25 @@ function isObjectsEqual(a: string[], b: string[]): boolean {
   }
   return true
 }
-
+const openFullScreen = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  setTimeout(() => {
+    loading.close()
+  }, CONST.LOADING_SEC)
+}
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 export default {
   getRandomItemsFromArray,
   shuffleObjectProperties,
-  isObjectsEqual
+  isObjectsEqual,
+  openFullScreen,
+  scrollToTop
 }

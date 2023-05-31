@@ -32,26 +32,27 @@
 				:key="index" 
 				style="margin-top:5px"
 			>
-			<el-badge 
-				value="new" 
-				class="item" 
-				is-dot
-				:hidden="(isOldItem(item) || !isOpenDotForNewTopic)"
-			>
-				<el-card shadow="hover" @click="setTopic(item)">
-					<div class="date" v-if="isRendered">
-						{{ item }}
-					</div>
-					<div class="skeleton" v-else>
-						<el-skeleton
-							animated 
-							:rows="1"
-						/>
-					</div>
-				</el-card>
-			</el-badge>
+				<el-badge 
+					value="new" 
+					class="item" 
+					is-dot
+					:hidden="(isOldItem(item) || !isOpenDotForNewTopic)"
+				>
+					<el-card shadow="hover" @click="setTopic(item)">
+						<div class="date" v-if="isRendered">
+							{{ item }}
+						</div>
+						<div class="skeleton" v-else>
+							<el-skeleton animated>
+								<template #template>
+									<el-skeleton-item variant="h3" style="width: 50%"/>
+								</template>
+							</el-skeleton>
+						</div>
+					</el-card>
+				</el-badge>
 			</el-col>
-  </el-row>
+  	</el-row>
 	</div>
 </template>
 
@@ -76,14 +77,20 @@
 
 	const isOpenDotForNewTopic = computed(() => settingStore.settings.isOpenDotForNewTopic)
 
-	const isRendered = ref(true)
+	const isRendered = ref(false)
+
+	// Simulate API to receive data
+	setTimeout(() => {
+		isRendered.value = true
+	}, CONST.RENDER_SEC)
+
 	const selectedQuestionCount = ref(allQuestionCount.TEN)
 	const selectedQuestionType = ref(allQuestionType.BLANK_FILLING_QUESTION)
 
 	const setTopic = (item: string) => {
 		userStore.updateExamStart(true)
 		userStore.updateTopic(item)
-		router.push('/pageExam')
+		router.push('/train-Eng/pageExam')
 	} 
 	const setQuestionCount = () => {
 		userStore.updateQuestionCount(selectedQuestionCount.value)

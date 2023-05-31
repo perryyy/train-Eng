@@ -7,7 +7,8 @@ export const useTopicStore = defineStore({
 			selectedTopic: '',
 			selectedQuestionType: '',
 			selectedQuestionCount: 0,
-			isExamStart: false
+			isExamStart: false,
+			dataIsReady: false,
 		}
 	},
 	actions: {
@@ -22,6 +23,9 @@ export const useTopicStore = defineStore({
 		},
 		updateExamStart(Status: boolean) {
 			this.isExamStart = Status
+		},
+		updateDataIsReady(Status: boolean) {
+			this.dataIsReady = Status
 		}
 	}
 })

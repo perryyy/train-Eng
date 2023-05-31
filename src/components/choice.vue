@@ -39,12 +39,19 @@
 			>
 				Submit
 			</el-button>
+			<el-button 
+				type="success"
+				v-if="isTestFinished"
+				@click="restart()"
+			>
+				Restart
+			</el-button>
 		</div>
 		<backToExamListDialog/>
 	</div>
 </template>
 <script lang="ts" setup>
-	import { ref, onMounted } from 'vue'
+	import { ref, onMounted, toRef } from 'vue'
 	import { useTopicStore } from '@/store/topic'
 	import { useSettingStore } from '@/store/setting'
 	import { ElNotification } from 'element-plus'
@@ -60,10 +67,10 @@
 		},
 	})
 	const choiceTopicArr: Ref<Array<{ [key: string]: { [key: string]: string } }>> = ref([])
-	const topicArr = props.topicArr
-	const flattenedValues = topicArr.map(item => item.key)
+  const topicArr = toRef(props, 'topicArr').value
 
 	const genChoiceTopic = () => {
+		const flattenedValues = topicArr.map(item => item.key)
 		for (let i = 0; i < topicArr.length; i++) {
 			let choiceTopicItems = []
 			choiceTopicItems.push(topicArr[i].key)
@@ -93,7 +100,7 @@
 	}
 
 	const isTestFinished = ref(false)
-	const emit = defineEmits(['emitResult'])
+	const emit = defineEmits(['emitResult', 'restart'])
 	const userStore = useTopicStore()
 
 	const submit = () => {
@@ -139,8 +146,16 @@
 			transformedObject[topic] === choiceItem
 		)
 	}
+	const restart = () => {
+		util.openFullScreen()
+		emit('restart')
+		userStore.updateExamStart(true)
+		isTestFinished.value = false
+		userAnswers.value = {}
+		util.scrollToTop()
+	}
 	onMounted(() => {
-    genChoiceTopic()
+		genChoiceTopic()
   })
 </script>
 <style lang="scss" scoped>

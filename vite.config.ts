@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    visualizer({ open: true }) // 自动开启分析页面
+    visualizer({ open: false }) // 自动开启分析页面
   ],
-  base: '/train-Eng/'
+  base: '/train-Eng'
 })

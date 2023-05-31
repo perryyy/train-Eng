@@ -25,13 +25,15 @@
       </div>
       <div v-if="type === CONST.QUESTION_TYPE.CHOICE_QUESTION">
         <choice 
-         :topicArr="topicArr"
-         @emitResult="onEmitResult"
+          :topicArr.sync="topicArr"
+          @restart="onRestart"
+          @emitResult="onEmitResult"
         />
       </div>
       <div v-else>
         <fillInTheBlank
-          :topicArr="topicArr"
+          :topicArr.sync="topicArr"
+          @restart="onRestart"
           @emitResult="onEmitResult"
         />
       </div>
@@ -58,7 +60,6 @@
   const fetchTopic: OBJECT_STANDARD | undefined = TOPIC[selectedTopic]
   const router = useRouter()
 
-  const dataIsReady = ref(false)
   let topicArr: topicArr[]= reactive([])
 
   onMounted(() => {
@@ -73,14 +74,11 @@
   const genTopic = () => {
     topicArr = Object.keys(fetchTopic).map(key => ({ key, value: fetchTopic[key] }))
     topicArr = util.getRandomItemsFromArray(topicArr, count)
-    if (type === CONST.QUESTION_TYPE.CHOICE_QUESTION) {
-      dataIsReady.value = true
-    } else {
-      dataIsReady.value = true
-    }
+    userStore.updateDataIsReady(true)
   }
   
   const isExamStart = computed(() => userStore.isExamStart)
+  const dataIsReady = computed(() => userStore.dataIsReady)
   const result = ref<{ title: string; count: number }[]>([])
   const onEmitResult = (data : RESULT) => {
     for (let key in data) {
@@ -91,13 +89,10 @@
         })
       }
     }
-    scrollToTop()
+    util.scrollToTop()
   }
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
+  const onRestart = () => {
+    result.value = []
   }
 </script>
 <style lang="scss" scoped>

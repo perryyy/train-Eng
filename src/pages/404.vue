@@ -22,7 +22,7 @@
   
 	const jumpToHome = () => {
     state.dialogVisible = false
-    h('/')
+    router.push('/train-Eng')
 	}
   let jumpTimer: NodeJS.Timeout | null 
 

@@ -37,6 +37,7 @@
   }
   const back = () => {
     changeDialogStatus(false)
+    userStore.updateDataIsReady(false)
     userStore.updateExamStart(false)
     router.push('/train-Eng')
   }

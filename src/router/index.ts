@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
 import { useTopicStore } from '@/store/topic'
 import { useSettingStore } from '@/store/setting'
+import util from '@/utils/utils'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/index.vue')
   },
   {
-    path: '/pageExam',
+    path: '/train-Eng/pageExam',
     name: 'pageExam',
     meta: {
       title: 'pageExam',
@@ -30,10 +31,11 @@ const router = createRouter({
   routes
 });
 router.beforeEach((to, from) => {
+  util.openFullScreen()
   const userStore = useTopicStore()
   const isExamStart = userStore.isExamStart
   const settingStore = useSettingStore()
-  if (to.fullPath === '/train-Eng/' && isExamStart) {
+  if (to.fullPath === '/train-Eng' && isExamStart) {
     settingStore.isChangeDialogStatus(true)
     return false
   } else {

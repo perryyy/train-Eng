@@ -45,17 +45,25 @@
       >
         Submit
       </el-button>
+      <el-button 
+        type="success"
+        v-if="isTestFinished"
+        @click="restart()"
+      >
+        Restart
+      </el-button>
     </div>
     <backToExamListDialog />
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, toRef } from 'vue'
   import { useSettingStore } from '@/store/setting'
   import { useTopicStore } from '@/store/topic'
   import { CONST } from '@/utils/const'
   import { TOPIC_ARRAY } from '@/type'
   import { ElNotification } from 'element-plus'
+  import util from '@/utils/utils'
   import backToExamListDialog from './backToExamListDialog.vue'
 
   const props = defineProps({
@@ -64,7 +72,7 @@
       required: true,
     },
   })
-  const topicArr = props.topicArr
+  const topicArr = toRef(props, 'topicArr')
   const inputMaxLength = CONST.INPUT_MAX_LENGTH
   const isTestFinished = ref(false)
   const utterance = new SpeechSynthesisUtterance()
@@ -74,11 +82,11 @@
     utterance.text = string
     speechSynthesis.speak(utterance)
   }
-  const emit = defineEmits(['emitResult'])
+	const emit = defineEmits(['emitResult', 'restart'])
 
   const userStore = useTopicStore()
   const submit = () => {
-    const questionCount = topicArr.length
+    const questionCount = topicArr.value.length
     let correctAnswerCount = 0
     let incorrectAnswerCount = 10
 
@@ -117,6 +125,14 @@
     if (currentInput) {
       currentInput.focus()
     }
+  }
+  const restart = () => {
+    util.openFullScreen()
+    emit('restart')
+    userStore.updateExamStart(true)
+    isTestFinished.value = false
+    userAnswers.value = {}
+    util.scrollToTop()
   }
 </script>
 <style lang="scss" scoped>
