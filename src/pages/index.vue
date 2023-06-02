@@ -67,7 +67,7 @@
 	import { RECORDS_OBJECT } from '@/type'
 
 	const allTopic = Object.keys(TOPIC)
-	const allTopicSortByDate = computed(() => [...allTopic].sort())
+	const allTopicSortByDate = [...allTopic].sort()
 
 	const allQuestionCount = CONST.QUESTION_COUNT
 	const allQuestionType = CONST.QUESTION_TYPE

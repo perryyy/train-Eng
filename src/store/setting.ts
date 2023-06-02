@@ -12,11 +12,11 @@ export const useSettingStore = defineStore({
 		}
 	},
 	actions: {
-		updateSettings(settings: SETTING_FORM) {
-			this.settings = settings
+		updateSettings(Settings: SETTING_FORM) {
+			this.settings = Settings
 		},
-		isChangeDialogStatus(status: boolean) {
-			this.dialogVisible = status
+		updateDialogStatus(Status: boolean) {
+			this.dialogVisible = Status
 		}
 	}
 })

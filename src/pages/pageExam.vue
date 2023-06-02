@@ -25,7 +25,7 @@
       </div>
       <div v-if="type === CONST.QUESTION_TYPE.CHOICE_QUESTION">
         <choice 
-          :topicArr.sync="topicArr"
+          :topicArr.sync="topicArr" 
           @restart="onRestart"
           @emitResult="onEmitResult"
         />
@@ -42,12 +42,13 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, reactive, ref, computed } from 'vue'
-	import { useTopicStore } from '@/store/topic'
-	import { useRouter } from 'vue-router'
+  import { useTopicStore } from '@/store/topic'
+  import { useRouter } from 'vue-router'
   import { TOPIC } from '@/assets/topic'
-	import { CONST } from '@/utils/const'
-	import { RESULT, OBJECT_STANDARD } from '@/type'
-	import util from '@/utils/utils'
+  import { CONST } from '@/utils/const'
+  import { RESULT, OBJECT_STANDARD } from '@/type'
+  import { ElNotification } from 'element-plus'
+  import util from '@/utils/utils'
   import fillInTheBlank from '@/components/fillInTheBlank.vue'
   import choice from '@/components/choice.vue'
   
@@ -81,6 +82,7 @@
   const dataIsReady = computed(() => userStore.dataIsReady)
   const result = ref<{ title: string; count: number }[]>([])
   const onEmitResult = (data : RESULT) => {
+  userStore.updateExamStart(false)
     for (let key in data) {
       if (data.hasOwnProperty(key)) {
         result.value.push({
@@ -90,6 +92,12 @@
       }
     }
     util.scrollToTop()
+    ElNotification({
+      title: 'Success',
+      message: 'Exam is over',
+      type: 'success',
+      showClose: false,
+    })
   }
   const onRestart = () => {
     result.value = []

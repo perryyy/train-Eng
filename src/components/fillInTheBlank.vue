@@ -31,40 +31,20 @@
         </div>
       </el-card>
     </div>
-    <div class="actions">
-      <el-button
-        type="warning"
-        @click="changeDialogStatus(true)"
-      >
-        Back
-      </el-button>
-      <el-button 
-        type="primary" 
-        :disabled="isTestFinished"
-        @click="submit()"
-      >
-        Submit
-      </el-button>
-      <el-button 
-        type="success"
-        v-if="isTestFinished"
-        @click="restart()"
-      >
-        Restart
-      </el-button>
-    </div>
-    <backToExamListDialog />
+    <actions 
+      :isTestFinished="isTestFinished"
+      @handleSubmit="handleSubmit"
+      @handleRestart="handleRestart"
+    />
   </div>
 </template>
 <script lang="ts" setup>
   import { ref, toRef } from 'vue'
-  import { useSettingStore } from '@/store/setting'
   import { useTopicStore } from '@/store/topic'
   import { CONST } from '@/utils/const'
   import { TOPIC_ARRAY } from '@/type'
-  import { ElNotification } from 'element-plus'
   import util from '@/utils/utils'
-  import backToExamListDialog from './backToExamListDialog.vue'
+  import actions from '@/components/actions.vue'
 
   const props = defineProps({
     topicArr: {
@@ -85,10 +65,9 @@
 	const emit = defineEmits(['emitResult', 'restart'])
 
   const userStore = useTopicStore()
-  const submit = () => {
+  const handleSubmit = () => {
     const questionCount = topicArr.value.length
     let correctAnswerCount = 0
-    let incorrectAnswerCount = 10
 
     for (let prop in userAnswers.value) {
       if (userAnswers.value.hasOwnProperty(prop)) {
@@ -98,25 +77,9 @@
         }
       }
     }
-    incorrectAnswerCount = questionCount - correctAnswerCount
+    const resultObj = util.calculateExamResults(questionCount, correctAnswerCount)
     isTestFinished.value = true
-    userStore.updateExamStart(false)
-    const resultObj = {
-      'Total Count': questionCount,
-      'Correct': correctAnswerCount,
-      'Incorrect': incorrectAnswerCount
-    }
     emit('emitResult', resultObj)
-    ElNotification({
-      title: 'Success',
-      message: 'Exam is over',
-      type: 'success',
-      showClose: false,
-    })
-  }
-  const settingStore = useSettingStore()
-  const changeDialogStatus = (status: boolean) => {
-    settingStore.isChangeDialogStatus(status)
   }
 
   const focusInput = (key: string) => {
@@ -126,8 +89,8 @@
       currentInput.focus()
     }
   }
-  const restart = () => {
-    util.openFullScreen()
+  const handleRestart = () => {
+    util.openFullScreenLoading()
     emit('restart')
     userStore.updateExamStart(true)
     isTestFinished.value = false
@@ -165,13 +128,6 @@
           }
         }
       }
-    }
-    .actions {
-		  padding-bottom: 1%;
-      width: 100%;
-      display: flex;
-      justify-content: center; 
-      align-items: center; 
     }
   }
 </style>

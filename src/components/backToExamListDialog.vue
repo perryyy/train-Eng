@@ -33,7 +33,7 @@
   const dialogVisible = computed(() => settingStore.dialogVisible)
 
   const changeDialogStatus = (status: boolean) => {
-    settingStore.isChangeDialogStatus(status)
+    settingStore.updateDialogStatus(status)
   }
   const back = () => {
     changeDialogStatus(false)

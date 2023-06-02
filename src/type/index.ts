@@ -7,16 +7,16 @@ export interface RECORDS_OBJECT {
 }
 export interface Topic {
   [date: string]: {
-    [key: string]: string;
-  };
+    [key: string]: string
+  }
 }
 export interface SETTING_FORM {
-  isOpenDotForNewTopic: boolean;
+  isOpenDotForNewTopic: boolean
 }
 export interface TOPIC_ARRAY { key: string, value: string }
 export interface CHOICE_TOPIC_ARRAY {
   [key: string]: string[]
 }
 export type OBJECT_STANDARD = {
-  [key: string]: string;
+  [key: string]: string
 }

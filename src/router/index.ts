@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Index',
     },
-    component: () => import('@/pages/index.vue')
+    component: defineAsyncComponent(() => import('@/pages/index.vue'))
   },
   {
     path: '/train-Eng/pageExam',
@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'pageExam',
     },
-    component: () => import('@/pages/pageExam.vue')
+    component: defineAsyncComponent(() => import('@/pages/pageExam.vue'))
   },
 	{
 		path: '/:catchAll(.*)',
@@ -29,17 +29,32 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-});
-router.beforeEach((to, from) => {
-  util.openFullScreen()
+})
+
+router.isReady().then(() => {
+  if (window.location.pathname === '/') {
+    router.replace('/train-Eng')
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  util.openFullScreenLoading()
   const userStore = useTopicStore()
   const isExamStart = userStore.isExamStart
   const settingStore = useSettingStore()
+  if (from.name === null) {
+    if (to.name === null) {
+      userStore.updateDataIsReady(false)
+      userStore.updateExamStart(false)
+      next('/train-Eng')
+    } else if (to.name === 'Index') {
+      userStore.updateExamStart(false)
+    }
+  }
   if (to.fullPath === '/train-Eng' && isExamStart) {
-    settingStore.isChangeDialogStatus(true)
-    return false
+    settingStore.updateDialogStatus(true)
   } else {
-    return true
+    next()
   }
 })
 export default router

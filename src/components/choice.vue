@@ -25,40 +25,20 @@
 				</div>
 			</el-card>
 		</div>
-		<div class="actions">
-			<el-button
-				type="warning"
-				@click="changeDialogStatus(true)"
-			>
-				Back
-			</el-button>
-			<el-button 
-				type="primary" 
-				:disabled="isTestFinished"
-				@click="submit()"
-			>
-				Submit
-			</el-button>
-			<el-button 
-				type="success"
-				v-if="isTestFinished"
-				@click="restart()"
-			>
-				Restart
-			</el-button>
-		</div>
-		<backToExamListDialog/>
+    <actions 
+      :isTestFinished="isTestFinished"
+      @handleSubmit="handleSubmit"
+      @handleRestart="handleRestart"
+    />
 	</div>
 </template>
 <script lang="ts" setup>
 	import { ref, onMounted, toRef } from 'vue'
 	import { useTopicStore } from '@/store/topic'
-	import { useSettingStore } from '@/store/setting'
-	import { ElNotification } from 'element-plus'
 	import { TOPIC_ARRAY, OBJECT_STANDARD } from '@/type'
 	import { CONST } from '@/utils/const'
 	import util from '@/utils/utils'
-	import backToExamListDialog from './backToExamListDialog.vue'
+	import actions from '@/components/actions.vue'
 
 	const props = defineProps({
 		topicArr: {
@@ -94,19 +74,13 @@
 
 	const userAnswers: Ref<Record<string, string[]>> = ref({})
 
-	const settingStore = useSettingStore()
-	const changeDialogStatus = (status: boolean) => {
-		settingStore.isChangeDialogStatus(status)
-	}
-
 	const isTestFinished = ref(false)
 	const emit = defineEmits(['emitResult', 'restart'])
 	const userStore = useTopicStore()
 
-	const submit = () => {
+	const handleSubmit = () => {
   	const questionCount = choiceTopicArr.value.length
 		let correctAnswerCount = 0
-		let incorrectAnswerCount = 10
 		for (const key in transformedObject) {
 			if (
 				transformedObject.hasOwnProperty(key) &&
@@ -118,21 +92,9 @@
 				}
 			}
 		}
-  	incorrectAnswerCount = questionCount - correctAnswerCount
+		const resultObj = util.calculateExamResults(questionCount, correctAnswerCount)
 		isTestFinished.value = true
-  	userStore.updateExamStart(false)
-		const resultObj = {
-			'Total Count': questionCount,
-			'Correct': correctAnswerCount,
-			'Incorrect': incorrectAnswerCount
-		}
 		emit('emitResult', resultObj)
-		ElNotification({
-			title: 'Success',
-			message: 'Exam is over',
-      type: 'success',
-			showClose: false
-		})
 	}
 
 	const transformedObject: OBJECT_STANDARD = {}
@@ -146,8 +108,8 @@
 			transformedObject[topic] === choiceItem
 		)
 	}
-	const restart = () => {
-		util.openFullScreen()
+	const handleRestart = () => {
+		util.openFullScreenLoading()
 		emit('restart')
 		userStore.updateExamStart(true)
 		isTestFinished.value = false
@@ -168,13 +130,6 @@
 				border-color: red;
 			}
 		}
-	}
-	.actions {
-		padding-bottom: 1%;
-		width: 100%;
-		display: flex;
-		justify-content: center; 
-		align-items: center; 
 	}
 }
 

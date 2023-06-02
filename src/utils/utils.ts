@@ -52,7 +52,7 @@ function isObjectsEqual(a: string[], b: string[]): boolean {
   }
   return true
 }
-const openFullScreen = () => {
+const openFullScreenLoading = () => {
   const loading = ElLoading.service({
     lock: true,
     background: 'rgba(0, 0, 0, 0.7)',
@@ -67,10 +67,20 @@ const scrollToTop = () => {
     behavior: 'smooth'
   })
 }
+const calculateExamResults = (questionCount: number, correctAnswerCount:number) => {
+  const incorrectAnswerCount = questionCount - correctAnswerCount
+  const resultObj = {
+    'Total Count': questionCount,
+    'Correct': correctAnswerCount,
+    'Incorrect': incorrectAnswerCount
+  }
+  return resultObj
+}
 export default {
   getRandomItemsFromArray,
   shuffleObjectProperties,
   isObjectsEqual,
-  openFullScreen,
-  scrollToTop
+  openFullScreenLoading,
+  scrollToTop,
+  calculateExamResults
 }
