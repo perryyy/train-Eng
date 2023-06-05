@@ -1,11 +1,11 @@
 <template>
   <el-empty>
-    <el-button type="primary" @click="jumpToHome">Button</el-button>
+    <el-button type="primary" @click="jumpToHome">Back</el-button>
   </el-empty>
 	<el-dialog
     v-model="dialogVisible"
     title="Tips"
-    width="30%"
+    width="fit-content"
 		show-close
   >
     <span>Redirect to the homepage later.</span>

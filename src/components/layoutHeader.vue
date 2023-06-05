@@ -5,7 +5,6 @@
     </div>
     <div class="setting">
       <el-button 
-        type="info"
         icon="Setting"
         circle
         @click="changeSettingDialog(true)"

@@ -32,7 +32,8 @@ const router = createRouter({
 })
 
 router.isReady().then(() => {
-  if (window.location.pathname === '/') {
+  const currentPathName = window.location.pathname
+  if (currentPathName === '/') {
     router.replace('/train-Eng')
   }
 })

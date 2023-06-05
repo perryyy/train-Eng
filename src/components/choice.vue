@@ -16,7 +16,7 @@
 						<el-radio
 							v-for="(choiceItem, i) in item[Object.keys(item)[0]]"
 							:key="i"
-							:label="choiceItem"
+							:label="util.replaceUnderscoreWithSpace(choiceItem)"
 							:disabled="isTestFinished"
 							:border="isTestFinished && isAnswerCorrect(userAnswers[Object.keys(item)[0]], Object.keys(item)[0], choiceItem)"
 							name="type" 
@@ -87,7 +87,7 @@
 				userAnswers.value.hasOwnProperty(key) 
 			) {
 				const userAnswerValue = userAnswers.value[key]
-				if (userAnswerValue.toString() === transformedObject[key]) {
+				if (userAnswerValue.toString() === util.replaceUnderscoreWithSpace(transformedObject[key])) {
 					correctAnswerCount ++
 				}
 			}
@@ -104,7 +104,7 @@
 	})
 	const isAnswerCorrect = (answers: string[], topic: string, choiceItem: string) => {
 		return (
-			((answers && !answers.includes(choiceItem))|| !answers) && 
+			((answers && !answers.includes(util.replaceUnderscoreWithSpace(choiceItem)))|| !answers) && 
 			transformedObject[topic] === choiceItem
 		)
 	}

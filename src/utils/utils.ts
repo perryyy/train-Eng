@@ -34,7 +34,7 @@ function shuffleArray(array: any[]): any[] {
   const shuffledArray = [...array]
 
   for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const randomIndex: number = Math.floor(Math.random() * (i + 1));
     [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]]
   }
 
@@ -67,7 +67,7 @@ const scrollToTop = () => {
     behavior: 'smooth'
   })
 }
-const calculateExamResults = (questionCount: number, correctAnswerCount:number) => {
+const calculateExamResults = (questionCount: number, correctAnswerCount: number) => {
   const incorrectAnswerCount = questionCount - correctAnswerCount
   const resultObj = {
     'Total Count': questionCount,
@@ -76,11 +76,32 @@ const calculateExamResults = (questionCount: number, correctAnswerCount:number) 
   }
   return resultObj
 }
+const replaceUnderscoreWithSpace = (key: string) => {
+  if (typeof key === 'string') {
+    return key.replace(/_/g, " ").trim()
+  }
+  return ''
+}
+const removeUnderscoreAndNormalize = (value: string) => {
+  if (typeof value === 'string') {
+    return value.replace(/_/g, "").trim().toLowerCase()
+  }
+  return ''
+}
+const removeAllSpaces = (value: string) => {
+  if (typeof value === 'string') {
+    return value.replace(/\s/g, "").trim().toLowerCase()
+  }
+  return ''
+}
 export default {
   getRandomItemsFromArray,
   shuffleObjectProperties,
   isObjectsEqual,
   openFullScreenLoading,
   scrollToTop,
-  calculateExamResults
+  calculateExamResults,
+  replaceUnderscoreWithSpace,
+  removeUnderscoreAndNormalize,
+  removeAllSpaces
 }

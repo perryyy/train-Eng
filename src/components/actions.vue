@@ -49,4 +49,9 @@
     justify-content: center; 
     align-items: center; 
   }
+  @media only screen and (max-width: 767px) {
+		.actions {
+			padding: 5% 0;
+		}
+	}
 </style>

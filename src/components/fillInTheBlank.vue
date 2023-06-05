@@ -26,8 +26,8 @@
         <div class="errMsg" v-if="userAnswers[item.key] && userAnswers[item.key].length >= inputMaxLength">
           <el-text type="danger">The input text length cannot exceed {{ inputMaxLength }} characters.</el-text>
         </div>
-        <div class="answer" v-if="userAnswers[item.key] !== item.key && isTestFinished">
-          Answer : <span class="correctAnswer">{{ item.key }}</span>
+        <div class="answer" v-if="!isEqualStrings(userAnswers[item.key], item.key) && isTestFinished">
+          Answer : <span class="correctAnswer">{{ util.replaceUnderscoreWithSpace(item.key) }}</span>
         </div>
       </el-card>
     </div>
@@ -59,7 +59,7 @@
   const userAnswers = ref<Record<string, any>>({})
 
   const pronounceWord = (string: string) => {
-    utterance.text = string
+    utterance.text = util.replaceUnderscoreWithSpace(string)
     speechSynthesis.speak(utterance)
   }
 	const emit = defineEmits(['emitResult', 'restart'])
@@ -72,7 +72,7 @@
     for (let prop in userAnswers.value) {
       if (userAnswers.value.hasOwnProperty(prop)) {
         const value: Record<string, any> = userAnswers.value[prop]
-        if (value.toLowerCase() === prop.toLowerCase()) {
+        if (typeof value === 'string' && isEqualStrings(value, prop)) {
           correctAnswerCount++
         }
       }
@@ -96,6 +96,11 @@
     isTestFinished.value = false
     userAnswers.value = {}
     util.scrollToTop()
+  }
+  const isEqualStrings = (userAnswer: string, topic: string) => {
+    const formatUserAnswer = util.removeAllSpaces(userAnswer)
+    const formatTopic = util.removeUnderscoreAndNormalize(topic)
+    return formatUserAnswer === formatTopic
   }
 </script>
 <style lang="scss" scoped>

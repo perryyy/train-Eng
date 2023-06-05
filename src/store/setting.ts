@@ -18,5 +18,11 @@ export const useSettingStore = defineStore({
 		updateDialogStatus(Status: boolean) {
 			this.dialogVisible = Status
 		}
-	}
+	},
+	persist: [
+		{
+			paths: ['settings'],
+			storage: localStorage,
+		}
+	]
 })
