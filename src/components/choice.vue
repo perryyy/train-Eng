@@ -104,7 +104,7 @@
 	})
 	const isAnswerCorrect = (answers: string[], topic: string, choiceItem: string) => {
 		return (
-			((answers && !answers.includes(util.replaceUnderscoreWithSpace(choiceItem)))|| !answers) && 
+			((answers && !(answers.toString() === util.replaceUnderscoreWithSpace(choiceItem)))|| !answers) && 
 			transformedObject[topic] === choiceItem
 		)
 	}
